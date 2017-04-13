@@ -1,0 +1,71 @@
+.checkboxWrap {
+  padding: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .only {
+    display: none;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background: #F1FCFF;
+    .only {
+      display: block;
+      text-transform: uppercase;
+      color: #3E9CE8;
+    }
+  }
+
+  :global(.checkbox) {
+    vertical-align: top;
+    margin: 0 3px 0 0;
+    width: 17px;
+    height: 17px;
+  }
+
+  :global(.checkbox + label ) {
+    cursor: pointer;
+    line-height: 16px;
+  }
+
+  :global(.checkbox:not(checked) ) {
+    position: absolute;
+    opacity: 0;
+  }
+
+  :global(.checkbox:not(checked) + label ) {
+    position: relative;
+    padding: 0 0 0 40px;
+  }
+
+  :global(.checkbox:not(checked) + label:before) {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: #FFFFFF;
+    border: 1px solid #3E9CE8;
+  }
+
+  :global(.checkbox:not(checked) + label:after) {
+    content: '✔';
+    color: #3E9CE8;
+    position: absolute;
+    top: -2px;
+    left: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background: transparent;
+    display: none;
+  }
+
+  :global(.checkbox:checked + label:after) {
+    display: block;
+  }
+}

@@ -1,0 +1,14 @@
+.headerWrap {
+  height: 150px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  img {
+    transition: transform 1s;
+    &:hover {
+      transform: rotate(360deg);
+    }
+  }
+}
