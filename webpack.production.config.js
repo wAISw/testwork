@@ -6,7 +6,6 @@ const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const postcssImport = require('postcss-import');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const StatsPlugin = require('stats-webpack-plugin');
 
 module.exports = {
   // The entry file. All your app roots fromn here.
@@ -17,7 +16,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/dist/'),
     filename: '[name]-[hash].min.js',
-    publicPath: '/'
+    publicPath: './'
   },
   plugins: [
     // webpack gives your modules and chunks ids to identify them. Webpack can vary the
@@ -43,11 +42,6 @@ module.exports = {
         warnings: false,
         screw_ie8: true
       }
-    }),
-    // creates a stats.json
-    new StatsPlugin('webpack.stats.json', {
-      source: false,
-      modules: false
     }),
     // plugin for passing in data to the js, like what NODE_ENV we are in.
     new webpack.DefinePlugin({
