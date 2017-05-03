@@ -1,10 +1,12 @@
 'use strict';
 
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var StatsPlugin = require('stats-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const postcssImport = require('postcss-import');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StatsPlugin = require('stats-webpack-plugin');
 
 module.exports = {
   // The entry file. All your app roots fromn here.
@@ -65,18 +67,38 @@ module.exports = {
     preLoaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint'
+        loaders: ['eslint'],
+        include: [
+          path.resolve(__dirname, '../src'),
+        ],
       }
     ],
     // loaders handle the assets, like transforming sass to css or jsx to js.
     loaders: [{
-      test: /\.js?$/,
-      exclude: /node_modules/,
-      loader: 'babel'
+      test: /bootstrap-sass\/assets\/javascripts\//,
+      loader: 'imports?jQuery=jquery',
     }, {
-      test: /\.json?$/,
-      loader: 'json'
+      test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=application/font-woff',
+    }, {
+      test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=application/font-woff2',
+    }, {
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=application/octet-stream',
+    }, {
+      test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=application/font-otf',
+    }, {
+      test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'file',
+    }, {
+      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=image/svg+xml',
+    }, {
+      test: /\.js$/,
+      loaders: ['babel-loader'],
+      exclude: /node_modules/,
     }, {
       test: /\.gif$/,
       loader: 'file?name=[name].[ext]',
@@ -88,18 +110,17 @@ module.exports = {
       loader: 'file?name=[name].[ext]',
     }, {
       test: /\.scss$/,
-      // we extract the styles into their own .css file instead of having
-      // them inside the js.
-      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss-loader!sass')
-    }, {
-      test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
-      loader: 'url?limit=10000&mimetype=application/font-woff'
-    }, {
-      test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/,
-      loader: 'file'
+      loader: 'style!css?modules&localIdentName=[path][name]--[local]!postcss-loader!sass',
     }]
   },
-  postcss: [
-    require('autoprefixer')
-  ]
+  postcss: (webpack) => {
+    return [
+      autoprefixer({
+        browsers: ['last 2 versions'],
+      }),
+      postcssImport({
+        addDependencyTo: webpack,
+      }),
+    ];
+  }
 };
